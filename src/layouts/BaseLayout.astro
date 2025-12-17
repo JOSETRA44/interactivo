@@ -1,0 +1,66 @@
+---
+const { title = 'Alex Dev' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="robots" content="index,follow" />
+    <meta name="description" content="Portfolio de Alex Dev — demo 3D interactiva con proyectos, skills y contacto." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Explora mis proyectos en una experiencia 3D interactiva." />
+    <link rel="icon" href="/img/preview.svg" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido principal</a>
+    <header role="banner" class="site-header">
+      <div class="container">
+        <div class="brand"><a href="/">Alex Dev</a></div>
+        <nav role="navigation" aria-label="Navegación principal">
+          <ul class="nav-list">
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects">Proyectos</a></li>
+            <li><a href="/about">Sobre mí</a></li>
+            <li><a href="/contact">Contacto</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <button id="toggle-controls" class="icon-btn" aria-pressed="false" aria-label="Mostrar controles en pantalla" title="Mostrar controles en pantalla">⚙</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Loading overlay shown while the demo loads (accessible, cancelable) -->
+    <div id="loading-overlay" class="loading-overlay" aria-hidden="true">
+      <div class="loading-content" role="status" aria-live="polite">
+        <div class="loading-visual">
+          <!-- Simple SVG car that 'flies' in -->
+          <svg class="loading-car" viewBox="0 0 128 64" width="180" height="90" aria-hidden="true">
+            <g fill="#00aaff">
+              <rect x="8" y="28" width="112" height="18" rx="4" />
+              <circle cx="34" cy="50" r="6" fill="#111" />
+              <circle cx="94" cy="50" r="6" fill="#111" />
+            </g>
+          </svg>
+        </div>
+        <div class="loading-text">Cargando demo…</div>
+        <div class="loading-actions">
+          <button id="manual-load" class="icon-btn" style="display:none;" aria-label="Cargar ahora" title="Cargar ahora">▶ Cargar ahora</button>
+          <button id="cancel-load" class="icon-btn" aria-label="Cancelar carga" title="Cancelar carga">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <main id="main" role="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© {new Date().getFullYear()} Alex Dev</div>
+    </footer>
+  </body>
+</html>
