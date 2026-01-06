@@ -702,6 +702,122 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// Confetti effect for social media stops
+function createConfetti(socialNetwork = 'tiktok') {
+    if (!scene) return;
+    
+    // Define colors for each social network
+    const confettiColors = {
+        'tiktok': [0x000000, 0x00f2ea, 0xff0050], // Black, Cyan, Pink
+        'instagram': [0xE1306C, 0xFD1D1D, 0xF77737, 0xFCAF45], // Pink gradient to orange
+        'youtube': [0xff0000, 0xffffff, 0x282828], // Red, White, Dark
+        'facebook': [0x1877f2, 0x0a66c2, 0xffffff], // Facebook blue shades
+        'linkedin': [0x0077b5, 0x0A66C2, 0xffffff], // LinkedIn blue
+        'github': [0x171515, 0xffffff, 0xff6600], // Dark, White, Orange
+    };
+
+    const colors = confettiColors[socialNetwork] || confettiColors.tiktok;
+    const centerPos = new THREE.Vector3(0, 5, 0); // Center of the map
+    const confettiCount = 80;
+
+    for (let i = 0; i < confettiCount; i++) {
+        const geometry = new THREE.BoxGeometry(
+            0.15 + Math.random() * 0.15,
+            0.15 + Math.random() * 0.15,
+            0.05 + Math.random() * 0.05
+        );
+        
+        const colorIdx = Math.floor(Math.random() * colors.length);
+        const material = new THREE.MeshStandardMaterial({
+            color: colors[colorIdx],
+            emissive: colors[colorIdx],
+            emissiveIntensity: 0.6,
+            roughness: 0.3,
+            metalness: 0.2,
+        });
+        
+        const confetti = new THREE.Mesh(geometry, material);
+        
+        // Random spawn around center, slightly above
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 2 + Math.random() * 3;
+        confetti.position.set(
+            centerPos.x + Math.cos(angle) * radius,
+            centerPos.y + Math.random() * 2,
+            centerPos.z + Math.sin(angle) * radius
+        );
+        
+        // Random rotation
+        confetti.rotation.set(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
+        );
+        
+        // Physics: velocity and spin
+        confetti.userData = {
+            velocity: new THREE.Vector3(
+                (Math.random() - 0.5) * 0.06,
+                0.03 + Math.random() * 0.06,
+                (Math.random() - 0.5) * 0.06
+            ),
+            spin: new THREE.Vector3(
+                (Math.random() - 0.5) * 0.12,
+                (Math.random() - 0.5) * 0.12,
+                (Math.random() - 0.5) * 0.12
+            ),
+            life: 2800, // milliseconds
+            createdAt: performance.now()
+        };
+        
+        scene.add(confetti);
+    }
+}
+
+// Update confetti particles each frame
+function updateConfetti() {
+    const now = performance.now();
+    const confettiToRemove = [];
+    
+    scene.children.forEach(child => {
+        if (child.userData && child.userData.life !== undefined) {
+            const age = now - child.userData.createdAt;
+            
+            if (age > child.userData.life) {
+                confettiToRemove.push(child);
+            } else {
+                // Apply gravity
+                child.userData.velocity.y -= 0.0008;
+                
+                // Apply velocity
+                child.position.add(child.userData.velocity);
+                
+                // Apply spin
+                child.rotation.x += child.userData.spin.x;
+                child.rotation.y += child.userData.spin.y;
+                child.rotation.z += child.userData.spin.z;
+                
+                // Fade out near the end
+                const fadeStart = child.userData.life * 0.75;
+                if (age > fadeStart) {
+                    const fadeProgress = (age - fadeStart) / (child.userData.life - fadeStart);
+                    child.material.opacity = 1 - fadeProgress;
+                    if (!child.material.transparent) child.material.transparent = true;
+                }
+            }
+        }
+    });
+    
+    // Remove dead confetti
+    confettiToRemove.forEach(child => {
+        try {
+            child.geometry && child.geometry.dispose();
+            child.material && child.material.dispose();
+            scene.remove(child);
+        } catch(e) { /* ignore */ }
+    });
+}
+
 // On window load we setup UI toggles and start the auto entrance + background loading
 window.addEventListener('load', () => {
     setupControlsToggle();
@@ -856,121 +972,6 @@ window.addEventListener('load', () => {
     function easeInOutCubic(t) { return t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
 
     // Confetti effect for social media stops
-    function createConfetti(socialNetwork = 'tiktok') {
-        if (!scene) return;
-        
-        // Define colors for each social network
-        const confettiColors = {
-            'tiktok': [0x000000, 0x00f2ea, 0xff0050], // Black, Cyan, Pink
-            'instagram': [0xE1306C, 0xFD1D1D, 0xF77737, 0xFCAF45], // Pink gradient to orange
-            'youtube': [0xff0000, 0xffffff, 0x282828], // Red, White, Dark
-            'facebook': [0x1877f2, 0x0a66c2, 0xffffff], // Facebook blue shades
-            'linkedin': [0x0077b5, 0x0A66C2, 0xffffff], // LinkedIn blue
-            'github': [0x171515, 0xffffff, 0xff6600], // Dark, White, Orange
-        };
-
-        const colors = confettiColors[socialNetwork] || confettiColors.tiktok;
-        const centerPos = new THREE.Vector3(0, 5, 0); // Center of the map
-        const confettiCount = 80;
-
-        for (let i = 0; i < confettiCount; i++) {
-            const geometry = new THREE.BoxGeometry(
-                0.15 + Math.random() * 0.15,
-                0.15 + Math.random() * 0.15,
-                0.05 + Math.random() * 0.05
-            );
-            
-            const colorIdx = Math.floor(Math.random() * colors.length);
-            const material = new THREE.MeshStandardMaterial({
-                color: colors[colorIdx],
-                emissive: colors[colorIdx],
-                emissiveIntensity: 0.6,
-                roughness: 0.3,
-                metalness: 0.2,
-            });
-            
-            const confetti = new THREE.Mesh(geometry, material);
-            
-            // Random spawn around center, slightly above
-            const angle = Math.random() * Math.PI * 2;
-            const radius = 2 + Math.random() * 3;
-            confetti.position.set(
-                centerPos.x + Math.cos(angle) * radius,
-                centerPos.y + Math.random() * 2,
-                centerPos.z + Math.sin(angle) * radius
-            );
-            
-            // Random rotation
-            confetti.rotation.set(
-                Math.random() * Math.PI,
-                Math.random() * Math.PI,
-                Math.random() * Math.PI
-            );
-            
-            // Physics: velocity and spin
-            confetti.userData = {
-                velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.06,
-                    0.03 + Math.random() * 0.06,
-                    (Math.random() - 0.5) * 0.06
-                ),
-                spin: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.12,
-                    (Math.random() - 0.5) * 0.12,
-                    (Math.random() - 0.5) * 0.12
-                ),
-                life: 2800, // milliseconds
-                createdAt: performance.now()
-            };
-            
-            scene.add(confetti);
-        }
-    }
-
-    // Update confetti particles each frame
-    function updateConfetti() {
-        const now = performance.now();
-        const confettiToRemove = [];
-        
-        scene.children.forEach(child => {
-            if (child.userData && child.userData.life !== undefined) {
-                const age = now - child.userData.createdAt;
-                
-                if (age > child.userData.life) {
-                    confettiToRemove.push(child);
-                } else {
-                    // Apply gravity
-                    child.userData.velocity.y -= 0.0008;
-                    
-                    // Apply velocity
-                    child.position.add(child.userData.velocity);
-                    
-                    // Apply spin
-                    child.rotation.x += child.userData.spin.x;
-                    child.rotation.y += child.userData.spin.y;
-                    child.rotation.z += child.userData.spin.z;
-                    
-                    // Fade out near the end
-                    const fadeStart = child.userData.life * 0.75;
-                    if (age > fadeStart) {
-                        const fadeProgress = (age - fadeStart) / (child.userData.life - fadeStart);
-                        child.material.opacity = 1 - fadeProgress;
-                        if (!child.material.transparent) child.material.transparent = true;
-                    }
-                }
-            }
-        });
-        
-        // Remove dead confetti
-        confettiToRemove.forEach(child => {
-            try {
-                child.geometry && child.geometry.dispose();
-                child.material && child.material.dispose();
-                scene.remove(child);
-            } catch(e) { /* ignore */ }
-        });
-    }
-
     function driveToPosition(targetPos, opts = {}) {
         // cinematic driving: longer duration scaled by distance, stop slightly before target
         if (!car) { console.warn('driveToPosition: car not ready'); return Promise.resolve('no-car'); }
