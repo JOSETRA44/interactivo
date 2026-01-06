@@ -5,5 +5,5 @@ const SITE = process.env.SITE || 'https://josetra44.github.io/interactivo';
 
 export default defineConfig({
   site: SITE,
-  base: '/',
+  base: '/interactivo/',
 });

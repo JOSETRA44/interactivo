@@ -14,6 +14,8 @@ jobs:
           node-version: '18'
       - run: npm ci
       - run: npm run build
+      - name: Add .nojekyll file
+        run: touch dist/.nojekyll
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:

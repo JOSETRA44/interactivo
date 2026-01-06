@@ -157,6 +157,38 @@
         </div>
     </div>
 
+    <!-- Route panel (desktop only) -->
+    <aside id="route-panel" class="route-panel" aria-label="Ubicaciones y recorrido" style="display:block; position: fixed; left: 18px; top: 100px; width: 200px; background: rgba(6,6,10,0.6); padding: 10px; border-radius: 10px; color: #eaf6ff; z-index: 1200;">
+      <div class="route-controls">
+        <button id="start-tour" class="btn" aria-label="Iniciar recorrido">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"></path></svg>
+          <span class="btn-label">Iniciar recorrido</span>
+        </button>
+        <button id="cancel-tour" class="btn" style="display:none;" aria-label="Cancelar recorrido">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.29 9.18 12 2.88 5.71 4.29 4.29 10.59 10.59 16.88 4.29z"></path></svg>
+          <span class="btn-label">Cancelar</span>
+        </button>
+        <button id="next-stop" class="btn" style="display:none;" aria-label="Continuar">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"></path></svg>
+          <span class="btn-label">Continuar</span>
+        </button>
+      </div> 
+      <div class="route-settings">
+        <label class="force-label">
+          <input id="force-animate" type="checkbox" checked /> <span class="force-text">Forzar animación</span>
+        </label>
+        <div id="reduced-note" class="reduced-note" aria-live="polite">Aviso: tu sistema solicita movimiento reducido; activar "Forzar animación" lo ignorará.</div>
+      </div>
+      <ol id="route-list" class="timeline" aria-hidden="false">
+        <li class="timeline-item"><div class="route-btn" role="button" tabindex="0" data-target="SKILLS" aria-label="Ir a Skills"><span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18"><defs><linearGradient id="pinGradientA" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#00d1ff"/><stop offset="100%" stop-color="#0077ff"/></linearGradient></defs><path fill="url(#pinGradientA)" d="M12 2C8.13 2 5 5.13 5 9c0 4.7 6.5 11.6 6.9 12.1.3-.5 6.9-7.4 6.9-12.1 0-3.87-3.13-7-7-7zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg></span><span class="label">Skills</span></div></li>
+        <li class="timeline-item"><div class="route-btn" role="button" tabindex="0" data-target="EXPERIENCIA" aria-label="Ir a Experiencia"><span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18"><defs><linearGradient id="pinGradientB" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#00d1ff"/><stop offset="100%" stop-color="#0077ff"/></linearGradient></defs><path fill="url(#pinGradientB)" d="M12 2C8.13 2 5 5.13 5 9c0 4.7 6.5 11.6 6.9 12.1.3-.5 6.9-7.4 6.9-12.1 0-3.87-3.13-7-7-7zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg></span><span class="label">Experiencia</span></div></li>
+        <li class="timeline-item"><div class="route-btn" role="button" tabindex="0" data-target="PROYECTO 1" aria-label="Ir a Proyectos"><span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18"><defs><linearGradient id="pinGradientC" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#00d1ff"/><stop offset="100%" stop-color="#0077ff"/></linearGradient></defs><path fill="url(#pinGradientC)" d="M12 2C8.13 2 5 5.13 5 9c0 4.7 6.5 11.6 6.9 12.1.3-.5 6.9-7.4 6.9-12.1 0-3.87-3.13-7-7-7zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg></span><span class="label">Proyectos</span></div></li>
+        <li class="timeline-item"><div class="route-btn" role="button" tabindex="0" data-target="CONTACTO" aria-label="Ir a Contacto"><span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18"><defs><linearGradient id="pinGradientD" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#00d1ff"/><stop offset="100%" stop-color="#0077ff"/></linearGradient></defs><path fill="url(#pinGradientD)" d="M12 2C8.13 2 5 5.13 5 9c0 4.7 6.5 11.6 6.9 12.1.3-.5 6.9-7.4 6.9-12.1 0-3.87-3.13-7-7-7zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg></span><span class="label">Contacto</span></div></li>
+        <li class="timeline-item"><div class="route-btn" role="button" tabindex="0" data-target="redes" aria-label="Ir a Redes sociales"><span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18"><defs><linearGradient id="pinGradientE" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#00d1ff"/><stop offset="100%" stop-color="#0077ff"/></linearGradient></defs><path fill="url(#pinGradientE)" d="M12 2C8.13 2 5 5.13 5 9c0 4.7 6.5 11.6 6.9 12.1.3-.5 6.9-7.4 6.9-12.1 0-3.87-3.13-7-7-7zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg></span><span class="label">Redes sociales</span></div></li> 
+      </ol>
+      <div id="route-announce" class="sr-only" aria-live="polite"></div>
+    </aside>
+
     <script>
         // --- Variables Globales ---
         let scene, camera, renderer;

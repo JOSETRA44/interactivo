@@ -35,3 +35,5 @@ Si ves mensajes tipo "Tracking Prevention blocked access to storage" en la conso
 Si quieres, puedo añadir `three.min.js` al repo por ti o cambiar la integración para usar `import 'three'` desde npm y un componente cliente (recomendado para producción).
 
 **Comportamiento de la UI:** La demo ahora reproduce automáticamente una breve animación de entrada y carga Three.js en segundo plano. Si la carga es lenta, aparecerá un botón **"Cargar ahora"** en la superposición para forzar la carga manualmente; también puedes cancelar la carga.
+
+**Conducción épica (prototipo):** En pantallas de escritorio aparece un panel a la izquierda con **ubicaciones** (Skills, Experiencia, Proyectos, Contacto y Redes sociales). Al hacer clic en una ubicación se inicia una conducción cinematográfica y breve hacia ese punto; la animación es interrumpible (Esc o botón Cancelar), respeta `prefers-reduced-motion` (salto instantáneo) y, al llegar, se ofrece la opción de continuar a la siguiente parada hasta terminar en el centro de redes sociales.
